@@ -32,6 +32,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set lowercase owner
+        id: owner
+        run: |
+          echo "OWNER=$(echo $GITHUB_REPOSITORY_OWNER | tr 'A-Z' 'a-z')" >> $GITHUB_OUTPUT
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -41,8 +46,7 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner && github.repository_owner.toLowerCase() }}/hugmine:latest
-
+            ghcr.io/${{ steps.owner.outputs.OWNER }}/hugmine:latest
           labels: |
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
             org.opencontainers.image.description=http server
