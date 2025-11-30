@@ -32,7 +32,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # 关键步骤：将 GitHub 用户名转为小写，避免 Docker tag 报错
+      # 将 GitHub 用户名转为小写
       - name: Set lowercase owner
         id: owner
         run: |
@@ -46,8 +46,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: |
-            ghcr.io/${{ steps.owner.outputs.OWNER }}/ws:latest
+          tags: ghcr.io/${{ steps.owner.outputs.OWNER }}/ws:latest
           labels: |
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
             org.opencontainers.image.description=http server
